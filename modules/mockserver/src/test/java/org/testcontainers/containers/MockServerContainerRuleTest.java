@@ -5,15 +5,14 @@ import org.junit.Test;
 import org.mockserver.client.MockServerClient;
 import org.testcontainers.utility.DockerImageName;
 
-import static org.hamcrest.Matchers.containsString;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
-import static org.rnorth.visibleassertions.VisibleAssertions.assertThat;
 
 public class MockServerContainerRuleTest {
 
     public static final DockerImageName MOCKSERVER_IMAGE = DockerImageName.parse(
-        "jamesdbloom/mockserver:mockserver-5.5.4"
+        "jamesdbloom/mockserver:mockserver-5.13.2"
     );
 
     // creatingProxy {
@@ -37,10 +36,8 @@ public class MockServerContainerRuleTest {
         // }
         // spotless:on
 
-        assertThat(
-            "Expectation returns expected response body",
-            SimpleHttpClient.responseFromMockserver(mockServer, "/person?name=peter"),
-            containsString("Peter the person")
-        );
+        assertThat(SimpleHttpClient.responseFromMockserver(mockServer, "/person?name=peter"))
+            .as("Expectation returns expected response body")
+            .contains("Peter the person");
     }
 }

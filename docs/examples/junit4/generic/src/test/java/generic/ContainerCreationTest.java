@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.utility.DockerImageName;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ContainerCreationTest {
 
@@ -20,7 +20,7 @@ public class ContainerCreationTest {
     // }
     // spotless:on
 
-    public static final DockerImageName ALPINE_IMAGE = DockerImageName.parse("alpine:3.14");
+    public static final DockerImageName ALPINE_IMAGE = DockerImageName.parse("alpine:3.16");
 
     // spotless:off
     // withOptions {
@@ -39,7 +39,7 @@ public class ContainerCreationTest {
 
     @Test
     public void testStartup() {
-        assertTrue(redis.isRunning()); // good enough to check that the container started listening
-        assertTrue(alpine.isRunning()); // good enough to check that the container started listening
+        assertThat(redis.isRunning()).isTrue(); // good enough to check that the container started listening
+        assertThat(alpine.isRunning()).isTrue(); // good enough to check that the container started listening
     }
 }

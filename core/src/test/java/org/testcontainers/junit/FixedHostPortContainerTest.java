@@ -13,8 +13,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test of {@link FixedHostPortGenericContainer}. Note that this is not an example of typical use (usually, a container
@@ -24,7 +23,7 @@ import static org.hamcrest.Matchers.equalTo;
  */
 public class FixedHostPortContainerTest {
 
-    private static final String TEST_IMAGE = "alpine:3.14";
+    private static final String TEST_IMAGE = "alpine:3.16";
 
     /**
      * Default http server port (just something different from default)
@@ -68,14 +67,12 @@ public class FixedHostPortContainerTest {
         ) {
             echoServer.start();
 
-            assertThat(
-                "Port mapping does not seem to match given fixed port",
-                echoServer.getMappedPort(TEST_PORT),
-                equalTo(unusedHostPort)
-            );
+            assertThat(echoServer.getMappedPort(TEST_PORT))
+                .as("Port mapping does not seem to match given fixed port")
+                .isEqualTo(unusedHostPort);
 
             final String content = this.readResponse(echoServer, unusedHostPort);
-            assertThat("Returned echo from fixed port does not match expected", content, equalTo(TEST_RESPONSE));
+            assertThat(content).as("Returned echo from fixed port does not match expected").isEqualTo(TEST_RESPONSE);
         }
     }
 
